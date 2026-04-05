@@ -389,6 +389,20 @@ resource "azurerm_dns_txt_record" "apex_jenkinsio" {
 
   tags = local.default_tags
 }
+# TXT record to verify ownership of jenkins.io domain for GitHub org "jenkinsci"
+# (code expires 7 days after issuance)
+resource "azurerm_dns_txt_record" "_gh-jenkinsci-o_jenkinsio" {
+  name                = "_gh-jenkinsci-o"
+  zone_name           = data.azurerm_dns_zone.jenkinsio.name
+  resource_group_name = data.azurerm_resource_group.proddns_jenkinsio.name
+  ttl                 = 300
+
+  record {
+    value = "5d217c4be9"
+  }
+
+  tags = local.default_tags
+}
 # Used for Maven Central ownership proof
 resource "azurerm_dns_txt_record" "lib_jenkins_io" {
   name                = "lib"
